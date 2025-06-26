@@ -44,13 +44,17 @@ class Mastermind extends React.PureComponent {
     }
 
     componentDidMount() {
-        setInterval(() => {
+        this.timerId = window.setInterval(() => {
             let newState = {...this.state};
             newState.timeout--;
             this.setState(newState, () => {
                 console.log(newState.timeout, this.state.timeout);
             }); // async
         }, 1_000)
+    }
+
+    componentWillUnmount() {
+        window.clearInterval(this.timerId);
     }
 
     play = () => {
