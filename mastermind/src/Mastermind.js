@@ -1,6 +1,10 @@
 import React from 'react';
 import Container from "./components/common/Container";
 import Card from "./components/common/Card";
+import InputText from "./components/common/input-text";
+import Button from "./components/common/button";
+import Badge from "./components/common/badge";
+import ProgressBar from "./components/common/progress-bar";
 /*
    1. Component-Based Programming
    I. Stateful Component
@@ -30,6 +34,7 @@ class Mastermind extends React.PureComponent {
             tries: 0,
             maxTries: 10,
             timeout: 60,
+            timeLimit: 60,
             secret: 549,
             guess: 123,
             moves: []
@@ -40,19 +45,59 @@ class Mastermind extends React.PureComponent {
         setInterval(() => {
             let newState = {...this.state};
             newState.timeout--;
-            this.setState(newState,()=>{
-              console.log(newState.timeout,this.state.timeout);
+            this.setState(newState, () => {
+                console.log(newState.timeout, this.state.timeout);
             }); // async
-        },1_000)
+        }, 1_000)
     }
 
-    render(){ // View -> ReactDOM
+    play = () => {
+        let newState = {...this.state};
+        newState.moves = [...this.state.moves, newState.guess]
+        newState.tries++;
+        this.setState(newState);
+    }
+
+    handleInputChange = (event) => {
+        this.setState({
+            guess: event.target.value
+        });
+    }
+
+    render() { // View -> ReactDOM
         return (
             <>
                 <br/>
                 <Container>
-                    <Card title="Mastermind">
-                        <span>{this.state.timeout}</span>
+                    <Card title={"Mastermind"}>
+
+                        <InputText label={"Guess"}
+                                   value={this.state.guess}
+                                   id={"guess"}
+                                   handleChange={this.handleInputChange}
+                                   explain={"Enter your guess"}/>
+                        <Button label={"Play"}
+                                click={this.play}
+                                color={"btn-success"}/>
+                        <Badge value={this.state.level}
+                               label={"Level"}
+                               color={"bg-primary"}
+                               isVisible={true}/>
+                        <Badge value={this.state.lives}
+                               label={"Lives"}
+                               color={"bg-secondary"}
+                               isVisible={true}/>
+                        <Badge value={`${this.state.tries} out of ${this.state.maxTries}`}
+                               label={"Number of moves"}
+                               color={"bg-warning"}
+                               isVisible={true}/>
+                        <Badge value={this.state.timeout}
+                               label={"Timeout"}
+                               color={"bg-warning"}
+                               isVisible={true}/>
+                        <ProgressBar value={this.state.timeout}
+                                     max={this.state.timeLimit}
+                                     min={0}/>
                     </Card>
                 </Container>
             </>
