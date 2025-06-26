@@ -1,10 +1,12 @@
 import React from 'react';
-import Container from "./components/common/Container";
-import Card from "./components/common/Card";
+import Container from "./components/common/container";
+import Card from "./components/common/card";
 import InputText from "./components/common/input-text";
 import Button from "./components/common/button";
 import Badge from "./components/common/badge";
 import ProgressBar from "./components/common/progress-bar";
+import Table from "./components/common/table";
+import createSecret, {evaluateMove} from "./utils/utility";
 /*
    1. Component-Based Programming
    I. Stateful Component
@@ -35,7 +37,7 @@ class Mastermind extends React.PureComponent {
             maxTries: 10,
             timeout: 60,
             timeLimit: 60,
-            secret: 549,
+            secret: createSecret(3),
             guess: 123,
             moves: []
         }
@@ -53,14 +55,36 @@ class Mastermind extends React.PureComponent {
 
     play = () => {
         let newState = {...this.state};
-        newState.moves = [...this.state.moves, newState.guess]
         newState.tries++;
+        if (newState.secret === newState.guess) {
+            if (newState.level === 10){
+                //TODO: Player Wins!
+            }
+            newState.level++;
+            newState.lives++;
+            newState.tries = 0;
+            newState.maxTries += 2;
+            newState.timeLimit += 30;
+            newState.timeout = newState.timeLimit;
+            newState.moves = [];
+        } else {
+            if (newState.tries === newState.maxTries){
+                if (newState.lives === 0){
+                    //TODO: Game is Over
+                }
+                newState.lives--;
+                newState.moves = [];
+                newState.tries = 0;
+                newState.timeout = newState.timeLimit;
+            }
+            newState.moves = [...this.state.moves, evaluateMove({guess: newState.guess, secret: newState.secret})];
+        }
         this.setState(newState);
     }
 
     handleInputChange = (event) => {
         this.setState({
-            guess: event.target.value
+            guess: Number(event.target.value)
         });
     }
 
@@ -98,6 +122,13 @@ class Mastermind extends React.PureComponent {
                         <ProgressBar value={this.state.timeout}
                                      max={this.state.timeLimit}
                                      min={0}/>
+                    </Card>
+                    <br/>
+                    <Card title={"History"}>
+                        <Table fields={["guess", "message"]}
+                               values={this.state.moves}
+                               headers={["Guess", "Message"]}
+                               keyField={"guess"}/>
                     </Card>
                 </Container>
             </>

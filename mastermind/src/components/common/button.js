@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Button({color,click,label}) {
+export default function Button(props) {
     return(
-        <button className={"btn ".concat(color)}
-                onClick={click}>{label}
+        <button className={"btn ".concat(props.color)}
+                onClick={props.click}>{props.label}
         </button>
     );
 }
