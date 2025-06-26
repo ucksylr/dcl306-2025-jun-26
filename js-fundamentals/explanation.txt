@@ -1,0 +1,6 @@
+0. Type System
+1. functions
+2. object-based programming
+3. class-based programming
+4. functional programming: generator function
+5. Event-Driven + Async Programming: async function
