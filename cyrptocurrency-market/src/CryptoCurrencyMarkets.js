@@ -30,6 +30,7 @@ function CryptoCurrencyMarkets() {
             fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`)
                 .then(res => res.json())
                 .then(ticker => {
+                    setPrices([...prices, ticker.price]);
                     setPrices(prevPrices => [...prevPrices.slice(-9), ticker.price]);
                     console.log(ticker.price);
                 })
