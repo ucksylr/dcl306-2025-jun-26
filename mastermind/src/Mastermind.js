@@ -24,44 +24,86 @@ import createSecret, {evaluateMove} from "./utils/utility";
                                                         keying
        Model/State <------x---------- View / Input Element
        js:          event -> Model
+
+       State Management:
+       1. Stateful Component -> Class -> this.state -> Client-side
+       2.                                backend sync. -> REST API -> Server-side
+       3.
+
  */
+const initialState = {
+    level: 3,
+    lives: 3,
+    tries: 0,
+    maxTries: 10,
+    timeout: 60,
+    timeLimit: 60,
+    secret: createSecret(3),
+    guess: 123,
+    moves: []
+};
 
 // Stateful
 class Mastermind extends React.PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            level: 3,
-            lives: 3,
-            tries: 0,
-            maxTries: 10,
-            timeout: 60,
-            timeLimit: 60,
-            secret: createSecret(3),
-            guess: 123,
-            moves: []
+        let storedState = localStorage.getItem("mastermind-game");
+        if (storedState) {
+            storedState = JSON.parse(storedState);
+        } else {
+            storedState = initialState;
         }
+        this.state = storedState;
+        console.log("Mastermind::constructor");
     }
 
+    countDown = () => {
+        console.log("Mastermind::countDown");
+        let newState = {...this.state};
+        newState.timeout--;
+        if (newState.timeout <= 0) {
+            if (newState.lives === 0) {
+                //TODO: Player Loses
+            }
+            newState.lives--;
+            newState.secret = createSecret(newState.level);
+            newState.moves = [];
+            newState.tries = 0;
+            newState.timeout = newState.timeLimit;
+        }
+        this.setState(newState, () => {
+            localStorage.setItem("mastermind-game", JSON.stringify(newState));
+        }); // async
+        /*
+        has no effect, since react reduces all these state changes into a single state change!
+        this.setState(newState, () => {
+            console.log(this.state, newState);
+        }); // async
+        this.setState(newState, () => {
+            console.log(this.state, newState);
+        }); // async
+        this.setState(newState, () => {
+            console.log(this.state, newState);
+        }); // async
+         */
+    };
+
     componentDidMount() {
-        this.timerId = window.setInterval(() => {
-            let newState = {...this.state};
-            newState.timeout--;
-            this.setState(newState, () => {
-                console.log(newState.timeout, this.state.timeout);
-            }); // async
-        }, 1_000)
+        console.log("Mastermind::componentDidMount");
+        this.timerId = window.setInterval(this.countDown, 1_000);
     }
 
     componentWillUnmount() {
+        console.log("Mastermind::componentWillUnmount");
         window.clearInterval(this.timerId);
     }
 
     play = () => {
+        console.log("Mastermind::play");
         let newState = {...this.state};
         newState.tries++;
         if (newState.secret === newState.guess) {
-            if (newState.level === 10){
+            if (newState.level === 10) {
                 //TODO: Player Wins!
             }
             newState.level++;
@@ -72,8 +114,8 @@ class Mastermind extends React.PureComponent {
             newState.timeout = newState.timeLimit;
             newState.moves = [];
         } else {
-            if (newState.tries === newState.maxTries){
-                if (newState.lives === 0){
+            if (newState.tries === newState.maxTries) {
+                if (newState.lives === 0) {
                     //TODO: Game is Over
                 }
                 newState.lives--;
@@ -83,7 +125,9 @@ class Mastermind extends React.PureComponent {
             }
             newState.moves = [...this.state.moves, evaluateMove({guess: newState.guess, secret: newState.secret})];
         }
-        this.setState(newState);
+        this.setState(newState,()=>{
+            localStorage.setItem("mastermind-game", JSON.stringify(newState));
+        });
     }
 
     handleInputChange = (event) => {
@@ -93,6 +137,7 @@ class Mastermind extends React.PureComponent {
     }
 
     render() { // View -> ReactDOM
+        console.log("Mastermind::render");
         return (
             <>
                 <br/>
