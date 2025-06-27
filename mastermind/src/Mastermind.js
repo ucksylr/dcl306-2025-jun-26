@@ -33,7 +33,7 @@ import createSecret, {evaluateMove} from "./utils/utility";
                                     property drill
          you can mutate    state -> setState
                         property -> read-only -> cannot change state
-       5. Context API: stateless components -> custom hooks (useXYZ()) -> singleton (state)
+       5. Context API/Reducer API: stateless components -> custom hooks (useXYZ()) -> singleton (state)
  */
 const initialState = {
     level: 3,

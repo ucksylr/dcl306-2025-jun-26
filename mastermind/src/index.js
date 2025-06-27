@@ -6,9 +6,10 @@ import MastermindHooks from "./MastermindHooks";
 import {BrowserRouter, Route, Routes} from "react-router";
 import PlayerLoses from "./components/loses";
 import PlayerWins from "./components/wins";
+import MastermindProvider from "./providers/mastermind-provider";
 
 const routing = <Routes>
-    <Route path="/" element={<MastermindHooks/>} exact/>
+    <Route path="/" element={<MastermindProvider/>} exact/>
     <Route path="/wins" element={<PlayerWins/>} exact/>
     <Route path="/loses" element={<PlayerLoses/>} exact/>
 </Routes>;
