@@ -11,7 +11,7 @@ import createSecret, {evaluateMove} from "./utils/utility";
    1. Component-Based Programming
    I. Stateful Component
       JavaScript Class
-      **JavaScript Function -> React Hook**
+      **JavaScript Function -> React Hooks -> useState()**
    II. Stateless Component
       JavaScript Function
 
@@ -28,8 +28,12 @@ import createSecret, {evaluateMove} from "./utils/utility";
        State Management:
        1. Stateful Component -> Class -> this.state -> Client-side
        2.                                backend sync. -> REST API -> Server-side
-       3.
-
+       3. localStorage: game state/sessionStorage: jwt
+       4. Mastermind: game state -> UI/View: composite/tree -> stateless component
+                                    property drill
+         you can mutate    state -> setState
+                        property -> read-only -> cannot change state
+       5. Context API: stateless components -> custom hooks (useXYZ()) -> singleton (state)
  */
 const initialState = {
     level: 3,
