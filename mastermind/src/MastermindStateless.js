@@ -37,7 +37,7 @@ export default function MastermindStateless() {
             navigate("/loses");
         }
     });
-    
+
     return( // View
         <>
             <br/>
