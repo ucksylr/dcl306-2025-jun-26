@@ -26,23 +26,25 @@ function CryptoCurrencyMarkets() {
     useEffect(() => {
         if (symbols.length === 0) return;
         const timerId = setInterval(() => {
+            if (!isStarted) return;
             fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`)
                 .then(res => res.json())
                 .then(ticker => {
-                    setPrices([...prices, ticker.price]);
+                    setPrices(prevPrices => [...prevPrices.slice(-9), ticker.price]);
                     console.log(ticker.price);
                 })
         }, 3_000);
         return () => {
             clearInterval(timerId);
         }
-    }, [symbol]);
+    }, [symbol,isStarted]);
 
     const start = () => {
         setStarted(true);
     };
     const stop = () => {
         setStarted(false);
+        setPrices([]);
     };
     return (
         <Container>
