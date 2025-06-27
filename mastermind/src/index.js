@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 //import Mastermind from './Mastermind';
 import 'bootstrap/dist/css/bootstrap.css';
-import MastermindHooks from "./MastermindHooks";
+//import MastermindHooks from "./MastermindHooks";
 import {BrowserRouter, Route, Routes} from "react-router";
 import PlayerLoses from "./components/loses";
 import PlayerWins from "./components/wins";
