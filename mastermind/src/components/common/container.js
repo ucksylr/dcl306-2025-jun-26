@@ -1,6 +1,6 @@
 
 export default function Container({ children }) {
-    console.log("Container::render");
+    //console.log("Container::render");
     return(
         <div className="container">
             {children}

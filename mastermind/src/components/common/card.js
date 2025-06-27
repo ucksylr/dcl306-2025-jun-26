@@ -1,5 +1,5 @@
 export default function Card({title,children}) {
-    console.log("Card::render");
+    //console.log("Card::render");
     return (
       <div className={"card"}>
           <div className={"card-header"}>

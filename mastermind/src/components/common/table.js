@@ -1,5 +1,5 @@
 export default function Table({headers,values,fields,keyField}) {
-    console.log("Table::render");
+    //console.log("Table::render");
     return (
         <table className="table table-striped table-bordered table-responsive table-hover">
             <thead>
