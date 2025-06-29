@@ -30,9 +30,8 @@ function CryptoCurrencyMarkets() {
             fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`)
                 .then(res => res.json())
                 .then(ticker => {
-                    setPrices([...prices, ticker.price]);
-                    setPrices(prevPrices => [...prevPrices.slice(-9), ticker.price]);
-                    console.log(ticker.price);
+                    const currentPrice = {"price": ticker.price, "date": Date.now()};
+                    setPrices(p => [...p.slice(-9), currentPrice]);
                 })
         }, 3_000);
         return () => {
@@ -66,10 +65,10 @@ function CryptoCurrencyMarkets() {
 
                 </FormGroup>
 
-                <ul>
+                <ul className="list-group">
                     {
                         prices.map((price, i) => (
-                            <li key={i}>{price}</li>
+                            <li className="list-group-item" key={i}>{new Date(price.date).toLocaleString()}: {price.price}</li>
                         ))
                     }
                 </ul>
