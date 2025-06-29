@@ -29,6 +29,8 @@ function play(game){
             game.moves = [...game.moves, evaluateMove({guess: game.guess, secret: game.secret})];
         }
     }
+    
+    localStorage.setItem("mastermind-game", JSON.stringify(getContextAsJson(game)));
 }
 
 let countDown = (game) => {
@@ -44,7 +46,37 @@ let countDown = (game) => {
         game.tries = 0  ;
         game.counter = game.gameConstraints.timeLimit;
     }
+    localStorage.setItem("mastermind-game", JSON.stringify(getContextAsJson(game)));
 };
+
+function getContextAsJson(game) {
+    return {
+        "level": game.level,
+        "lives": game.lives,
+        "tries": game.tries,
+        "status": game.status,
+        "gameConstraints": {
+            "maxTries": game.gameConstraints.maxTries,
+            "timeLimit": game.gameConstraints.timeLimit
+        },
+        "counter": game.counter,
+        "secret": game.secret,
+        "guess": game.guess,
+        "moves": game.moves
+    }
+}
+
+function setContextFromJSON(context, json) {
+    context.level = json.level
+    context.lives = json.lives
+    context.tries = json.tries
+    context.status = json.status
+    context.gameConstraints = json.gameConstraints
+    context.counter = json.counter
+    context.secret = json.secret
+    context.guess = json.guess
+    context.moves = json.moves
+}
 
 export default function GameReducer(game, action) {
     const newGame = {...game};
@@ -58,6 +90,9 @@ export default function GameReducer(game, action) {
             break;
         case "TIME_CLICKED":
             countDown(newGame);
+            break;
+        case "RELOAD_GAME":
+            setContextFromJSON(newGame, JSON.parse(localStorage.getItem("mastermind-game")))
             break;
         default:
             throw new Error("Invalid action type");

@@ -38,6 +38,10 @@ export default function MastermindStateless() {
         }
     });
 
+    useEffect(() => {
+        dispatchGame({type: "RELOAD_GAME", value: game})
+    }, []);
+
     return( // View
         <>
             <br/>
